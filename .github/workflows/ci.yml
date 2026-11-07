@@ -1,0 +1,41 @@
+name: AuraDynamics CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Test Rust on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        rust: [stable]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+
+      - name: Verify compilation on all targets
+        run: cargo check --all-targets
+
+      - name: Run unit & integration test suite
+        run: cargo test --all-targets --verbose
+
+      - name: Build release binaries
+        run: cargo build --release
+
+      - name: Execute liquid argon NVT demo simulation
+        run: cargo run --release -- demo
+
+      - name: Execute well-tempered metadynamics simulation
+        run: cargo run --release -- metadynamics

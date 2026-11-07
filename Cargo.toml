@@ -1,0 +1,25 @@
+[package]
+name = "aura-dynamics"
+version = "0.1.0"
+edition = "2021"
+authors = ["ZengLLQ <zengllq@users.noreply.github.com>"]
+description = "High-Performance Molecular Dynamics & Well-Tempered Metadynamics Simulation Engine in Rust"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ZengLLQ/aura-dynamics"
+keywords = ["molecular-dynamics", "biophysics", "metadynamics", "langevin-dynamics", "scientific-computing"]
+categories = ["science", "simulation"]
+
+[dependencies]
+
+[[bin]]
+name = "aura"
+path = "src/bin/main.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[profile.bench]
+opt-level = 3
